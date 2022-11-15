@@ -1,22 +1,211 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Calculadora</title>
-  <meta charset="utf-8">
-  <script type="text/javascript">
-    const vaciar = () => {
-      document.getElementById("pantalla").value = "";
-    }
+  <head>
+    <title>Calculadora</title>
+    <meta charset="utf-8" />
+    <script type="text/javascript">
+      //Rellenar info
+      const rellenar_info = () => {
+        if (document.getElementById("pantalla").value < 100) {
+          document.getElementById("info").innerHTML =
+            "Info: El resultado es menor que 100";
+        } else if (document.getElementById("pantalla").value > 200) {
+          document.getElementById("info").innerHTML =
+            "Info: El resultado es superior a 200";
+        } else if (
+          document.getElementById("pantalla").value > 99 ||
+          document.getElementById("pantalla").value < 201
+        ) {
+          document.getElementById("info").innerHTML =
+            "Info: El resultado está entre 100 y 200";
+        }
+      };
+      //Vaciar
+      const vaciar = () => {
+        document.getElementById("pantalla").value = "";
+      };
+      //Operaciones Unitarias
+      const cuadrado = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value) || encuentraComa(num.value)) {
+          num.value = "Error";
+        } else {
+          num.value = num.value * num.value;
+          rellenar_info();
+        }
+      };
+      const mod = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value) || encuentraComa(num.value)) {
+          num.value = "Error";
+        } else {
+          if (num.value < 0) num.value = -num.value;
+          rellenar_info();
+        }
+      };
+      const fact = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value) || encuentraComa(num.value)) {
+          num.value = "Error";
+        }else{
+          let x = 1;
+          for (let i = 1; i <= num.value; i++) {
+            x = x * i;
+          }
+          num.value = x;
+          rellenar_info();
+        }
+      };
+      //Operaciones Binarias
+      let primer_termino = undefined;
+      let operando = "";
+      const mul = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value) || encuentraComa(num.value)) {
+          num.value = "Error";
+        }else{
+          primer_termino = document.getElementById("pantalla").value;
+          operando = "multiplicacion";
+          vaciar();
+        }
+      };
+      const add = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value) || encuentraComa(num.value)) {
+          num.value = "Error";
+        }else{
+          primer_termino = document.getElementById("pantalla").value;
+          operando = "suma";
+          vaciar();
+        }
+      };
+      const eq = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value) || encuentraComa(num.value)) {
+          num.value = "Error";
+        }else{
+          if (operando == "suma") {
+            num.value = +primer_termino + +num.value;
+          } else if (operando == "multiplicacion") {
+            num.value = primer_termino * num.value;
+          } else {
+            num.value = num.value;
+          }
+          operando = "";
+          primer_termino = num.value;
+          rellenar_info();
+        }
+      };
+      //Operaciones en formato CSV
+      const sumatorio = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value)) {
+          num.value = "Error";
+        }else{
+          let array = num.value.split(",");
+          let i = 0,
+            acumulacion = 0;
 
-    const cuadrado = () => {
-      let num = document.getElementById("pantalla");
-      num.value = num.value * num.value;
-    }
-  </script>
-</head>
-<body>
-  Número:
-  <input type="text" id="pantalla" onclick="vaciar()">
-  <button id="cuadrado" onclick="cuadrado()">x<sup>2</sup></button>
- </body>
+ 
+
+          while (i < array.length) {
+            acumulacion += +array[i++];
+          }
+
+ 
+
+          num.value = acumulacion;
+          rellenar_info();
+        }
+      };
+
+ 
+
+      //ordenar lista como numeros y no como strings
+      const sortEggsInNest = (a, b) => {
+        return a - b;
+      }
+      //fin
+
+ 
+
+      const ordenar = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value)) {
+          num.value = "Error";
+        }else{
+          
+          let array = num.value.split(",");
+          array.sort(sortEggsInNest);
+          num.value = array;
+        }
+      };
+      const revertir = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value)) {
+          num.value = "Error";
+        }else{
+          
+          num.value = num.value.split(",").reverse().join(",");
+        }
+      };
+      const quitar = () => {
+        let num = document.getElementById("pantalla");
+        if (validar(num.value)) {
+          num.value = "Error";
+        }else{
+          
+          let array = num.value.split(",");
+          array.splice(array.length - 1);
+          num.value = array;
+        }
+      };
+      //Validar
+      const validar = (x) => {   
+        if (isNaN(x)){
+          let array = x.split("");
+          let y = false;
+          for(let i=0; i<array.length;i++){
+            if(array[i] != "," && array[i] != "0" && array[i] != "1" && array[i] != "2" && array[i] != "3" && array[i] != "4" && array[i] != "5" && array[i] != "6" && array[i] != "7" && array[i] != "8" && array[i] != "9")
+              return true;           
+          }
+        }
+        return false;
+      };
+
+ 
+
+      const encuentraComa = (y) => {
+        let array = y.split("");
+        for(let i=0; i<array.length;i++){
+          if(array[i]==","){
+            return true;
+          }
+        }
+        return false;
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Calculadora de CORE</h1>
+    <input type="text" id="pantalla" onclick="vaciar()" />
+    <br />
+    <h2 id="info" class="grande" title="Info sobre el número">Info sobre el número</h2>
+    <br />
+    <h3>Operacion Unitaria</h3>
+    <button id="cuadrado" onclick="cuadrado()">x<sup>2</sup></button>
+    <button id="modulo" onclick="mod()">Mod</button>
+    <button id="factorial" onclick="fact()">n!</button>
+    <br />
+    <h3>Operacion Binaria</h3>
+    <button id="multiplicacion" onclick="mul()">*</button>
+    <button id="suma" onclick="add()">+</button>
+    <button id="igual" onclick="eq()">=</button>
+    <br />
+    <h3>Operacion CSV</h3>
+    <button id="sumatorio" onclick="sumatorio()">&Sigma;x</button>
+    <button id="ordenar" onclick="ordenar()">ordenar</button>
+    <button id="revertir" onclick="revertir()">revertir</button>
+    <button id="quitar" onclick="quitar()">quitar</button>
+  </body>
 </html>
