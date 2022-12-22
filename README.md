@@ -1,4 +1,4 @@
-Peáctica de la asignatura Computación Red de la ETSIT
+Práctica de la asignatura Computación Red de la ETSIT
 
 Versión: 27 de Enero de 2020
 
